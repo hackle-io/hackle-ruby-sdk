@@ -21,26 +21,3 @@ require 'hackle-ruby-sdk/client'
 require 'hackle-ruby-sdk/clients'
 require 'hackle-ruby-sdk/config'
 require 'hackle-ruby-sdk/version'
-# client = Hackle::Client.create('Ij3eRnhYMLrv8r9jzOSr9CjmNbhuZipK')
-#
-# variation = client.variation(39, 'as3d153114f3')
-#
-# puts variation
-#
-
-config = Hackle::Config.new(base_uri: 'http://sdk.hackledev.com', event_uri: 'http://event.hackledev.com')
-
-client = Hackle::Client.create('OjbjoArhGGb2RS58WF2eFR4LVjh2We22', config)
-
-1.times do
-  Thread.new do
-    loop do
-      user_id = (Time.now.to_f * 1000).to_i.to_s
-      client.variation(7, user_id)
-      client.track('qgafdafsdf', user_id)
-      sleep(1)
-    end
-  end
-end
-
-sleep(100000000)

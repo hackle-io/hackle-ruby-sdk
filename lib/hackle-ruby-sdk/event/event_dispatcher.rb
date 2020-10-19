@@ -34,7 +34,7 @@ module Hackle
     private
 
     def dispatch_payload(payload)
-      request = Net::HTTP::Post.new('/api/v1/event1s', @headers)
+      request = Net::HTTP::Post.new('/api/v1/events', @headers)
       request.content_type = 'application/json'
       request.body = payload.to_json
 

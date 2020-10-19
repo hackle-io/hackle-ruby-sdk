@@ -27,6 +27,10 @@ module Hackle
     # @return [String] The decided variation for the user, or default variation
     #
     def variation(experiment_key, user_id, default_variation = 'A')
+
+      return default_variation if experiment_key.nil?
+      return default_variation if user_id.nil?
+
       workspace = @workspace_fetcher.fetch
       return default_variation if workspace.nil?
 
@@ -55,6 +59,10 @@ module Hackle
     # @param value [Float] Additional numeric value of the event (e.g. purchase_amount, api_latency, etc.)
     #
     def track(event_key, user_id, value = nil)
+
+      return if event_key.nil?
+      return if user_id.nil?
+
       workspace = @workspace_fetcher.fetch
       return if workspace.nil?
 
