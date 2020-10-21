@@ -20,7 +20,7 @@ module Hackle
     end
 
     def self.default_event_uri
-      'https://events.hackle.io'
+      'https://event.hackle.io'
     end
 
     def self.default_logger
