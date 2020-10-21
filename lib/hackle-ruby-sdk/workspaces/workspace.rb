@@ -16,7 +16,7 @@ module Hackle
     class << self
       def create(data)
         buckets = Hash[data[:buckets].map { |b| [b[:id], bucket(b)] }]
-        running_experiments = Hash[data[:experiments].map { |e| [e[:key], experiment(e, buckets)] }]
+        running_experiments = Hash[data[:experiments].map { |re| [re[:key], running_experiment(re, buckets)] }]
         completed_experiment = Hash[data[:completedExperiments].map { |ce| [ce[:experimentKey], completed_experiment(ce)] }]
         event_types = Hash[data[:events].map { |e| [e[:key], event_type(e)] }]
         experiments = running_experiments.merge(completed_experiment)
@@ -25,7 +25,7 @@ module Hackle
 
       private
 
-      def experiment(data, buckets)
+      def running_experiment(data, buckets)
         Experiment::Running.new(
           data[:id],
           data[:key],

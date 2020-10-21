@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Hackle
 
   class EventProcessor
@@ -89,8 +91,8 @@ module Hackle
             break
           end
         end
-      rescue StandardError => e
-        @logger.error { "Uncaught exception in event message processor: #{e.inspect}" }
+      rescue => e
+        @logger.warn { "Uncaught exception in events message processor: #{e.inspect}" }
       ensure
         dispatch_events
       end

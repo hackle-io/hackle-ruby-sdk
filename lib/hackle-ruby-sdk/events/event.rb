@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Hackle
   class Event
     attr_reader :timestamp, :user_id

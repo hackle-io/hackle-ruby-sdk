@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'logger'
 
 module Hackle
@@ -5,8 +7,8 @@ module Hackle
 
     def initialize(options = {})
       @logger = options[:logger] || Config.default_logger
-      @base_uri = options[:base_uri] || Config.default_base_uri.chomp('/')
-      @event_uri = options[:base_uri] || Config.default_event_uri.chomp('/')
+      @base_uri = options[:base_uri] || Config.default_base_uri
+      @event_uri = options[:event_uri] || Config.default_event_uri
     end
 
     attr_reader :logger
@@ -18,7 +20,7 @@ module Hackle
     end
 
     def self.default_event_uri
-      'https://event.hackle.io'
+      'https://events.hackle.io'
     end
 
     def self.default_logger

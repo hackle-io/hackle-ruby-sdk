@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Hackle
   class Decision
     class NotAllocated < Decision
@@ -21,8 +23,8 @@ module Hackle
   end
 
   class Decider
-    def initialize(bucketer = Bucketer.new)
-      @bucketer = bucketer
+    def initialize
+      @bucketer = Bucketer.new
     end
 
     def decide(experiment, user_id)
