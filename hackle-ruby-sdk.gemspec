@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/hackle-io/hackle-ruby-sdk'
   spec.license       = 'Apache-2.0'
 
-  spec.files         = `git ls-files -z`.split("\x0")
+  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(spec)/}) }
   spec.require_paths = ['lib']
 
   spec.add_development_dependency 'bundler', '~> 1.17'
