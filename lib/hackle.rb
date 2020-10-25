@@ -12,7 +12,7 @@ module Hackle
   # @see Client#initialize
   #
   # @param sdk_key [String] The SDK key of your Hackle environment
-  # @param config [Config] An optional client configuration
+  # @param options An optional client configuration
   #
   # @return [Client] The Hackle client instance.
   #
