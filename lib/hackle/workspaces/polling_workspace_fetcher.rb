@@ -7,7 +7,7 @@ module Hackle
 
     DEFAULT_POLLING_INTERVAL = 10
 
-    def initialize(config, http_fetcher)
+    def initialize(config:, http_fetcher:)
       @logger = config.logger
       @http_fetcher = http_fetcher
       @current_workspace = Concurrent::AtomicReference.new

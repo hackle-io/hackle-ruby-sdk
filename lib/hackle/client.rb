@@ -1,12 +1,40 @@
 # frozen_string_literal: true
 
+require 'hackle/decision/bucketer'
+require 'hackle/decision/decider'
+
+require 'hackle/events/event'
+require 'hackle/events/event_dispatcher'
+require 'hackle/events/event_processor'
+
+require 'hackle/http/http'
+
+require 'hackle/models/bucket'
+require 'hackle/models/event_type'
+require 'hackle/models/experiment'
+require 'hackle/models/slot'
+require 'hackle/models/variation'
+
+require 'hackle/workspaces/http_workspace_fetcher'
+require 'hackle/workspaces/polling_workspace_fetcher'
+require 'hackle/workspaces/workspace'
+
 module Hackle
 
   #
   # A client for Hackle API.
   #
   class Client
-    def initialize(config, workspace_fetcher, event_processor, decider)
+
+    #
+    # Initializes a Hackle client.
+    #
+    # @param config [Config]
+    # @param workspace_fetcher [PollingWorkspaceFetcher]
+    # @param event_processor [EventProcessor]
+    # @param decider [Decider]
+    #
+    def initialize(config:, workspace_fetcher:, event_processor:, decider:)
       @logger = config.logger
       @workspace_fetcher = workspace_fetcher
       @event_processor = event_processor
@@ -28,7 +56,7 @@ module Hackle
     #
     # @return [String] The decided variation for the user, or default variation
     #
-    def variation(experiment_key, user_id, default_variation = 'A')
+    def variation(experiment_key:, user_id:, default_variation: 'A')
 
       return default_variation if experiment_key.nil?
       return default_variation if user_id.nil?
@@ -36,17 +64,18 @@ module Hackle
       workspace = @workspace_fetcher.fetch
       return default_variation if workspace.nil?
 
-      experiment = workspace.get_experiment(experiment_key)
+      experiment = workspace.get_experiment(experiment_key: experiment_key)
       return default_variation if experiment.nil?
 
-      decision = @decider.decide(experiment, user_id)
+      decision = @decider.decide(experiment: experiment, user_id: user_id)
       case decision
       when Decision::NotAllocated
         default_variation
       when Decision::ForcedAllocated
         decision.variation_key
       when Decision::NaturalAllocated
-        @event_processor.process(Event::Exposure.new(user_id, experiment, decision.variation))
+        exposure_event = Event::Exposure.new(user_id: user_id, experiment: experiment, variation: decision.variation)
+        @event_processor.process(event: exposure_event)
         decision.variation.key
       else
         default_variation
@@ -60,7 +89,7 @@ module Hackle
     # @param user_id [String] The identifier of user that performed the vent.
     # @param value [Float] Additional numeric value of the events (e.g. purchase_amount, api_latency, etc.)
     #
-    def track(event_key, user_id, value = nil)
+    def track(event_key:, user_id:, value: nil)
 
       return if event_key.nil?
       return if user_id.nil?
@@ -68,10 +97,11 @@ module Hackle
       workspace = @workspace_fetcher.fetch
       return if workspace.nil?
 
-      event_type = workspace.get_event_type(event_key)
+      event_type = workspace.get_event_type(event_type_key: event_key)
       return if event_type.nil?
 
-      @event_processor.process(Event::Track.new(user_id, event_type, value))
+      track_event = Event::Track.new(user_id: user_id, event_type: event_type, value: value)
+      @event_processor.process(event: track_event)
     end
 
     #
@@ -80,29 +110,6 @@ module Hackle
     def close
       @workspace_fetcher.stop!
       @event_processor.stop!
-    end
-
-    #
-    # Instantiates a Hackle client.
-    #
-    # @param sdk_key [String] The SDK key of your Hackle environment
-    # @param config [Config] An optional client configuration
-    #
-    # @return [Client] The Hackle client instance.
-    #
-    def self.create(sdk_key, config = Config.new)
-      sdk_info = SdkInfo.new(sdk_key)
-
-      http_workspace_fetcher = HttpWorkspaceFetcher.new(config, sdk_info)
-      polling_workspace_fetcher = PollingWorkspaceFetcher.new(config, http_workspace_fetcher)
-
-      event_dispatcher = EventDispatcher.new(config, sdk_info)
-      event_processor = EventProcessor.new(config, event_dispatcher)
-
-      polling_workspace_fetcher.start!
-      event_processor.start!
-
-      Client.new(config, polling_workspace_fetcher, event_processor, Decider.new)
     end
   end
 end

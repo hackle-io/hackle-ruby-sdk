@@ -7,7 +7,7 @@ module Hackle
     class Exposure < Event
       attr_reader :experiment, :variation
 
-      def initialize(user_id, experiment, variation)
+      def initialize(user_id:, experiment:, variation:)
         @timestamp = Event.generate_timestamp
         @user_id = user_id
         @experiment = experiment
@@ -18,7 +18,7 @@ module Hackle
     class Track < Event
       attr_reader :event_type, :value
 
-      def initialize(user_id, event_type, value = nil)
+      def initialize(user_id:, event_type:, value: nil)
         @timestamp = Event.generate_timestamp
         @user_id = user_id
         @event_type = event_type

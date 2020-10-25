@@ -6,10 +6,10 @@ module Hackle
     DEFAULT_DISPATCH_WORKER_SIZE = 2
     DEFAULT_DISPATCH_QUEUE_CAPACITY = 50
 
-    def initialize(config, sdk_info)
+    def initialize(config:, sdk_info:)
       @logger = config.logger
-      @client = HTTP.client(config.event_uri)
-      @headers = HTTP.sdk_headers(sdk_info)
+      @client = HTTP.client(base_uri: config.event_uri)
+      @headers = HTTP.sdk_headers(sdk_info: sdk_info)
       @dispatcher_executor = Concurrent::ThreadPoolExecutor.new(
         min_threads: DEFAULT_DISPATCH_WORKER_SIZE,
         max_threads: DEFAULT_DISPATCH_WORKER_SIZE,
@@ -17,10 +17,10 @@ module Hackle
       )
     end
 
-    def dispatch(events)
-      payload = create_payload(events)
+    def dispatch(events:)
+      payload = create_payload(events: events)
       begin
-        @dispatcher_executor.post { dispatch_payload(payload) }
+        @dispatcher_executor.post { dispatch_payload(payload: payload) }
       rescue Concurrent::RejectedExecutionError
         @logger.warn { 'Dispatcher executor queue is full. Event dispatch rejected' }
       end
@@ -35,7 +35,7 @@ module Hackle
 
     private
 
-    def dispatch_payload(payload)
+    def dispatch_payload(payload:)
       request = Net::HTTP::Post.new('/api/v1/events', @headers)
       request.content_type = 'application/json'
       request.body = payload.to_json
@@ -43,12 +43,12 @@ module Hackle
       response = @client.request(request)
 
       status_code = response.code.to_i
-      HTTP.check_successful(status_code)
+      HTTP.check_successful(status_code: status_code)
     rescue => e
       @logger.error { "Failed to dispatch events: #{e.inspect}" }
     end
 
-    def create_payload(events)
+    def create_payload(events:)
       exposure_events = []
       track_events = []
       events.each do |event|

@@ -6,10 +6,10 @@ module Hackle
 
     DEFAULT_FLUSH_INTERVAL = 10
 
-    def initialize(config, event_dispatcher)
+    def initialize(config:, event_dispatcher:)
       @logger = config.logger
       @event_dispatcher = event_dispatcher
-      @message_processor = MessageProcessor.new(event_dispatcher, config)
+      @message_processor = MessageProcessor.new(config: config, event_dispatcher: event_dispatcher)
       @flush_task = Concurrent::TimerTask.new(execution_interval: DEFAULT_FLUSH_INTERVAL) { flush }
       @consume_task = nil
       @running = false
@@ -26,7 +26,7 @@ module Hackle
     def stop!
       return unless @running
 
-      @message_processor.produce(Message::Shutdown.new, non_block: false)
+      @message_processor.produce(message: Message::Shutdown.new, non_block: false)
       @consume_task.join(10)
       @flush_task.shutdown
       @event_dispatcher.shutdown
@@ -34,12 +34,12 @@ module Hackle
       @running = false
     end
 
-    def process(event)
-      @message_processor.produce(Message::Event.new(event))
+    def process(event:)
+      @message_processor.produce(message: Message::Event.new(event))
     end
 
     def flush
-      @message_processor.produce(Message::Flush.new)
+      @message_processor.produce(message: Message::Flush.new)
     end
 
     class Message
@@ -63,7 +63,7 @@ module Hackle
       DEFAULT_MESSAGE_QUEUE_CAPACITY = 1000
       DEFAULT_MAX_EVENT_DISPATCH_SIZE = 500
 
-      def initialize(event_dispatcher, config)
+      def initialize(config:, event_dispatcher:)
         @logger = config.logger
         @event_dispatcher = event_dispatcher
         @message_queue = SizedQueue.new(DEFAULT_MESSAGE_QUEUE_CAPACITY)
@@ -71,7 +71,7 @@ module Hackle
         @consumed_events = []
       end
 
-      def produce(message, non_block: true)
+      def produce(message:, non_block: true)
         @message_queue.push(message, non_block)
       rescue ThreadError
         if @random.rand(1..100) == 1 # log only 1% of the time
@@ -84,7 +84,7 @@ module Hackle
           message = @message_queue.pop
           case message
           when Message::Event
-            consume_event(message.event)
+            consume_event(event: message.event)
           when Message::Flush
             dispatch_events
           when Message::Shutdown
@@ -99,7 +99,7 @@ module Hackle
 
       private
 
-      def consume_event(event)
+      def consume_event(event:)
         @consumed_events << event
         dispatch_events if @consumed_events.length >= DEFAULT_MAX_EVENT_DISPATCH_SIZE
       end
@@ -107,7 +107,7 @@ module Hackle
       def dispatch_events
         return if @consumed_events.empty?
 
-        @event_dispatcher.dispatch(@consumed_events)
+        @event_dispatcher.dispatch(events: @consumed_events)
         @consumed_events = []
       end
     end

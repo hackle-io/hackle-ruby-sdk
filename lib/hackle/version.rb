@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module Hackle
-  VERSION = '0.0.2'
+  VERSION = '0.0.3'
   SDK_NAME = 'ruby-sdk'
 
   class SdkInfo
     attr_reader :key, :name, :version
-    def initialize(key)
+    def initialize(key:)
       @key = key
       @name = SDK_NAME
       @version = VERSION
