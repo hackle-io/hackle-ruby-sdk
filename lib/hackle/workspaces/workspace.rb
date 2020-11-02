@@ -10,7 +10,13 @@ module Hackle
     end
 
     def get_event_type(event_type_key:)
-      @event_types[event_type_key]
+      event_type = @event_types[event_type_key]
+
+      if event_type.nil?
+        EventType.undefined(key: event_type_key)
+      else
+        event_type
+      end
     end
 
     class << self

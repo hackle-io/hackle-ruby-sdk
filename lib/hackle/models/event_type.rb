@@ -6,5 +6,9 @@ module Hackle
       @id = id
       @key = key
     end
+
+    def self.undefined(key:)
+      EventType.new(id: 0, key: key)
+    end
   end
 end
