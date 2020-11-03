@@ -98,7 +98,6 @@ module Hackle
       return if workspace.nil?
 
       event_type = workspace.get_event_type(event_type_key: event_key)
-      return if event_type.nil?
 
       track_event = Event::Track.new(user_id: user_id, event_type: event_type, value: value)
       @event_processor.process(event: track_event)
