@@ -1,14 +1,27 @@
 module Hackle
   class Workspace
+
+    # @param experiments [Hash{Integer => Experiment}]
+    # @param event_types [Hash{String => EventType}]
     def initialize(experiments:, event_types:)
+
+      # @type [Hash{Integer => Experiment}]
       @experiments = experiments
+
+      # @type [Hash{String => EventType}]
       @event_types = event_types
     end
 
+    # @param experiment_key [Integer]
+    #
+    # @return [Experiment, nil]
     def get_experiment(experiment_key:)
       @experiments[experiment_key]
     end
 
+    # @param event_type_key [String]
+    #
+    # @return [EventType]
     def get_event_type(event_type_key:)
       event_type = @event_types[event_type_key]
 
@@ -40,7 +53,7 @@ module Hackle
           key: data[:key],
           bucket: buckets[data[:bucketId]],
           variations: Hash[data[:variations].map { |v| [v[:id], variation(v)] }],
-          user_overrides: Hash[data[:execution][:userOverrides].map { |u| [u[:userId], u[:variationId]] }]
+          overrides: Hash[data[:execution][:userOverrides].map { |u| [u[:userId], u[:variationId]] }]
         )
       end
 

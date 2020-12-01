@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Hackle
-  VERSION = '0.1.0'
+  VERSION = '1.0.0'
   SDK_NAME = 'ruby-sdk'
 
   class SdkInfo

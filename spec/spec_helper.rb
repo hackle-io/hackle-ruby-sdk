@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "hackle/ruby/sdk"
+require 'hackle'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

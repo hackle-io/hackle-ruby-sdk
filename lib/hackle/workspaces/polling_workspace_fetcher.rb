@@ -15,6 +15,7 @@ module Hackle
       @running = false
     end
 
+    # @return [Workspace, nil]
     def fetch
       @current_workspace.get
     end
@@ -29,6 +30,8 @@ module Hackle
 
     def stop!
       return unless @running
+
+      @logger.info { 'Shutting down Hackle workspace_fetcher' }
 
       @task.shutdown
       @running = false

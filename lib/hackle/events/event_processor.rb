@@ -6,6 +6,8 @@ module Hackle
 
     DEFAULT_FLUSH_INTERVAL = 10
 
+    # @param config [Config]
+    # @param event_dispatcher [EventDispatcher]
     def initialize(config:, event_dispatcher:)
       @logger = config.logger
       @event_dispatcher = event_dispatcher
@@ -26,6 +28,8 @@ module Hackle
     def stop!
       return unless @running
 
+      @logger.info { 'Shutting down Hackle event_processor' }
+
       @message_processor.produce(message: Message::Shutdown.new, non_block: false)
       @consume_task.join(10)
       @flush_task.shutdown
@@ -34,6 +38,7 @@ module Hackle
       @running = false
     end
 
+    # @param event [UserEvent]
     def process(event:)
       @message_processor.produce(message: Message::Event.new(event))
     end
@@ -44,8 +49,11 @@ module Hackle
 
     class Message
       class Event < Message
+
+        # @return [UserEvent]
         attr_reader :event
 
+        # @param event [UserEvent]
         def initialize(event)
           @event = event
         end
@@ -71,6 +79,8 @@ module Hackle
         @consumed_events = []
       end
 
+      # @param message [Message]
+      # @param non_block [boolean]
       def produce(message:, non_block: true)
         @message_queue.push(message, non_block)
       rescue ThreadError
@@ -99,6 +109,7 @@ module Hackle
 
       private
 
+      # @param event [UserEvent]
       def consume_event(event:)
         @consumed_events << event
         dispatch_events if @consumed_events.length >= DEFAULT_MAX_EVENT_DISPATCH_SIZE
