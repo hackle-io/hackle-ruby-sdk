@@ -53,9 +53,9 @@ module Hackle
       track_events = []
       events.each do |event|
         case event
-        when Event::Exposure
+        when UserEvent::Exposure
           exposure_events << create_exposure_event(event)
-        when Event::Track
+        when UserEvent::Track
           track_events << create_track_event(event)
         end
       end
@@ -65,24 +65,31 @@ module Hackle
       }
     end
 
-    def create_exposure_event(event)
+    #
+    # @param exposure [UserEvent::Exposure]
+    #
+    def create_exposure_event(exposure)
       {
-        timestamp: event.timestamp,
-        userId: event.user_id,
-        experimentId: event.experiment.id,
-        experimentKey: event.experiment.key,
-        variationId: event.variation.id,
-        variationKey: event.variation.key
+        timestamp: exposure.timestamp,
+        userId: exposure.user.id,
+        experimentId: exposure.experiment.id,
+        experimentKey: exposure.experiment.key,
+        variationId: exposure.variation.id,
+        variationKey: exposure.variation.key
       }
     end
 
-    def create_track_event(event)
+    #
+    # @param track [UserEvent::Track]
+    #
+    def create_track_event(track)
       {
-        timestamp: event.timestamp,
-        userId: event.user_id,
-        eventTypeId: event.event_type.id,
-        eventTypeKey: event.event_type.key,
-        value: event.value
+        timestamp: track.timestamp,
+        userId: track.user.id,
+        eventTypeId: track.event_type.id,
+        eventTypeKey: track.event_type.key,
+        value: track.event.value,
+        properties: track.event.properties
       }
     end
   end

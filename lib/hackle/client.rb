@@ -3,16 +3,18 @@
 require 'hackle/decision/bucketer'
 require 'hackle/decision/decider'
 
-require 'hackle/events/event'
+require 'hackle/events/user_event'
 require 'hackle/events/event_dispatcher'
 require 'hackle/events/event_processor'
 
 require 'hackle/http/http'
 
 require 'hackle/models/bucket'
+require 'hackle/models/event'
 require 'hackle/models/event_type'
 require 'hackle/models/experiment'
 require 'hackle/models/slot'
+require 'hackle/models/user'
 require 'hackle/models/variation'
 
 require 'hackle/workspaces/http_workspace_fetcher'
@@ -36,8 +38,14 @@ module Hackle
     #
     def initialize(config:, workspace_fetcher:, event_processor:, decider:)
       @logger = config.logger
+
+      # @type [PollingWorkspaceFetcher]
       @workspace_fetcher = workspace_fetcher
+
+      # @type [EventProcessor]
       @event_processor = event_processor
+
+      # @type [Decider]
       @decider = decider
     end
 
@@ -50,16 +58,16 @@ module Hackle
     # - The user is not allocated to the experiment
     # - The decided variation has been dropped
     #
-    # @param experiment_key [Integer] The unique key of the experiment.
-    # @param user_id [String] The identifier of your customer. (e.g. user_email, account_id, decide_id, etc.)
+    # @param experiment_key [Integer] The unique key of the experiment. MUST NOT be nil.
+    # @param user [User] the user to participate in the experiment. MUST NOT be nil.
     # @param default_variation [String] The default variation of the experiment.
     #
     # @return [String] The decided variation for the user, or default variation
     #
-    def variation(experiment_key:, user_id:, default_variation: 'A')
+    def variation(experiment_key:, user:, default_variation: 'A')
 
-      return default_variation if experiment_key.nil?
-      return default_variation if user_id.nil?
+      return default_variation if experiment_key.nil? || !experiment_key.is_a?(Integer)
+      return default_variation if user.nil? || !user.is_a?(User) || !user.valid?
 
       workspace = @workspace_fetcher.fetch
       return default_variation if workspace.nil?
@@ -67,41 +75,45 @@ module Hackle
       experiment = workspace.get_experiment(experiment_key: experiment_key)
       return default_variation if experiment.nil?
 
-      decision = @decider.decide(experiment: experiment, user_id: user_id)
+      decision = @decider.decide(experiment: experiment, user: user)
       case decision
       when Decision::NotAllocated
         default_variation
       when Decision::ForcedAllocated
         decision.variation_key
       when Decision::NaturalAllocated
-        exposure_event = Event::Exposure.new(user_id: user_id, experiment: experiment, variation: decision.variation)
+        exposure_event = UserEvent::Exposure.new(user: user, experiment: experiment, variation: decision.variation)
         @event_processor.process(event: exposure_event)
         decision.variation.key
       else
         default_variation
       end
+
+    rescue => e
+      @logger.error { "Unexpected error while deciding variation for experiment[#{experiment_key}]. Returning default variation[#{default_variation}]: #{e.inspect}" }
+      default_variation
     end
 
     #
-    # Records the events performed by the user.
+    # Records the event that occurred by the user.
     #
-    # @param event_key [String]  The unique key of the events.
-    # @param user_id [String] The identifier of user that performed the vent.
-    # @param value [Float] Additional numeric value of the events (e.g. purchase_amount, api_latency, etc.)
+    # @param event [Event] the event that occurred.
+    # @param user [User] the user that occurred the event.
     #
-    def track(event_key:, user_id:, value: nil)
+    def track(event:, user:)
 
-      return if event_key.nil?
-      return if user_id.nil?
+      return if event.nil? || !event.is_a?(Event) || !event.valid?
+      return if user.nil? || !user.is_a?(User) || !user.valid?
 
       workspace = @workspace_fetcher.fetch
       return if workspace.nil?
 
-      event_type = workspace.get_event_type(event_type_key: event_key)
-      return if event_type.nil?
-
-      track_event = Event::Track.new(user_id: user_id, event_type: event_type, value: value)
+      event_type = workspace.get_event_type(event_type_key: event.key)
+      track_event = UserEvent::Track.new(user: user, event_type: event_type, event: event)
       @event_processor.process(event: track_event)
+
+    rescue => e
+      @logger.error { "Unexpected error while tracking event: #{e.inspect}" }
     end
 
     #
