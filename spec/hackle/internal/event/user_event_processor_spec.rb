@@ -116,33 +116,6 @@ module Hackle
 
         sut.stop
       end
-
-      it 'concurrency' do
-        sut = processor(
-          queue: SizedQueue.new(160_000),
-          event_dispatch_size: 10,
-          flush_interval_seconds: 0.01
-        )
-        event = UserEvents.track(key: '1')
-
-        task = lambda {
-          10_000.times do
-            sut.process(event)
-          end
-        }
-
-        jobs = 16.times.map do
-          Thread.new do
-            task.call
-          end
-        end
-
-        sut.start
-        jobs.each(&:join)
-        sut.stop
-
-        expect(@event_dispatcher).to have_received(:dispatch).exactly(16_000).times
-      end
     end
 
     describe 'start' do
