@@ -19,7 +19,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
-          bundler: 2.4.22
       - name: Install dependencies
         run: |
           bundle config set --local without 'rubocop'
