@@ -5,7 +5,7 @@ require 'models'
 require 'hackle/event'
 
 module Hackle
-  describe Event do
+  RSpec.describe Event do
     it 'build event' do
       event = Event.builder('purchase')
                    .value(42)

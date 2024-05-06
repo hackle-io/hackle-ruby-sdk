@@ -5,7 +5,7 @@ require 'models'
 require 'hackle/internal/http/http_client'
 
 module Hackle
-  describe HttpClient do
+  RSpec.describe HttpClient do
 
     it 'decorate' do
       http = double

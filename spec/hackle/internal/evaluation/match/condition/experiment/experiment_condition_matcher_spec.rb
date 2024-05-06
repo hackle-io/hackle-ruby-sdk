@@ -5,7 +5,7 @@ require 'models'
 require 'hackle/internal/evaluation/match/condition/experiment/experiment_condition_matcher'
 
 module Hackle
-  describe ExperimentConditionMatcher do
+  RSpec.describe ExperimentConditionMatcher do
 
     it 'matches' do
       ab_test_matcher = double

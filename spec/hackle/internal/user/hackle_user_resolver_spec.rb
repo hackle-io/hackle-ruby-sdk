@@ -5,7 +5,7 @@ require 'models'
 require 'hackle/internal/user/hackle_user_resolver'
 
 module Hackle
-  describe HackleUserResolver do
+  RSpec.describe HackleUserResolver do
 
     it 'empty' do
       actual = HackleUserResolver.new.resolve_or_nil(User.builder.build)

@@ -6,7 +6,7 @@ require 'hackle/internal/evaluation/flow/evaluation_flow'
 require 'hackle/internal/evaluation/evaluator/experiment/experiment_evaluation_flow_factory'
 
 module Hackle
-  describe ExperimentEvaluationFlowFactory do
+  RSpec.describe ExperimentEvaluationFlowFactory do
 
     def decision_with(flow, clazz)
       expect(flow).to be_a(EvaluationFlow::Decision)

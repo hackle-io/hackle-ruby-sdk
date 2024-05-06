@@ -5,7 +5,7 @@ require 'models'
 require 'hackle/internal/evaluation/evaluator/experiment/experiment_resolver'
 
 module Hackle
-  describe ExperimentTargetRuleDeterminer do
+  RSpec.describe ExperimentTargetRuleDeterminer do
 
     before do
       @target_matcher = double

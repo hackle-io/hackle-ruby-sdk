@@ -6,7 +6,7 @@ require 'hackle/internal/evaluation/flow/flow_evaluator'
 require 'hackle/internal/evaluation/evaluator/evaluator'
 
 module Hackle
-  describe EvaluationFlow do
+  RSpec.describe EvaluationFlow do
     it 'flow' do
       flow = EvaluationFlow::End.new
       expect(flow.evaluate(double('request'), Evaluator.context)).to be_nil

@@ -5,7 +5,7 @@ require 'models'
 require 'hackle/internal/evaluation/evaluator/experiment/experiment_evaluator'
 
 module Hackle
-  describe ExperimentEvaluator do
+  RSpec.describe ExperimentEvaluator do
 
     before do
       @flow_factory = double

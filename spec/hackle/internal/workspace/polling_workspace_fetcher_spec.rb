@@ -6,7 +6,7 @@ require 'hackle/internal/workspace/polling_workspace_fetcher'
 require 'hackle/internal/concurrent/schedule/timer_scheduler'
 
 module Hackle
-  describe PollingWorkspaceFetcher do
+  RSpec.describe PollingWorkspaceFetcher do
     before do
       @http_workspace_fetcher = double('Hackle::HttpWorkspaceFetcher')
       allow(@http_workspace_fetcher).to receive(:fetch_if_modified).and_return(nil)

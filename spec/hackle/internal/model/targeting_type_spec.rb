@@ -5,7 +5,7 @@ require 'hackle/internal/model/targeting'
 require 'hackle/internal/model/target'
 
 module Hackle
-  describe TargetingType do
+  RSpec.describe TargetingType do
     it 'IDENTIFIER' do
       targeting_type = TargetingType::IDENTIFIER
       expect(targeting_type.supports?(TargetKeyType::USER_ID)).to eq(false)

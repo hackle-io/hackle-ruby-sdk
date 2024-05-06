@@ -5,7 +5,7 @@ require 'models'
 require 'hackle/internal/workspace/http_workspace_fetcher'
 
 module Hackle
-  describe HttpWorkspaceFetcher do
+  RSpec.describe HttpWorkspaceFetcher do
 
     before do
       @http_client = double

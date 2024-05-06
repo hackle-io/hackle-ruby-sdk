@@ -5,7 +5,7 @@ require 'hackle/internal/evaluation/evaluator/contextual/contextual_evaluator'
 require 'hackle/internal/evaluation/evaluator/evaluator'
 
 module Hackle
-  describe ContextualEvaluator do
+  RSpec.describe ContextualEvaluator do
     it 'when context contains request then raise error - circular evaluation' do
       context = Evaluator.context
       request = Evaluators.request

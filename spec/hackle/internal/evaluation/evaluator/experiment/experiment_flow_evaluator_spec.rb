@@ -6,7 +6,7 @@ require 'hackle/internal/evaluation/evaluator/experiment/experiment_flow_evaluat
 
 module Hackle
 
-  describe ExperimentFlowEvaluator do
+  RSpec.describe ExperimentFlowEvaluator do
 
     before do
       @next_flow = double

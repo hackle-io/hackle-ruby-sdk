@@ -19,7 +19,7 @@ module Hackle
     end
   end
 
-  describe OperatorMatcher do
+  RSpec.describe OperatorMatcher do
     def v(value)
 
       version = Version.parse_or_nil(value)

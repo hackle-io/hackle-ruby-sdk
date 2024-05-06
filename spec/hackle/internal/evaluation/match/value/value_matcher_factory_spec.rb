@@ -6,7 +6,7 @@ require 'hackle/internal/evaluation/match/value/value_matcher_factory'
 require 'hackle/internal/model/value_type'
 
 module Hackle
-  describe ValueMatcherFactory do
+  RSpec.describe ValueMatcherFactory do
     it 'get' do
       sut = ValueMatcherFactory.new
 

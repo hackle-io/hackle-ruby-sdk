@@ -5,7 +5,7 @@ require 'models'
 require 'hackle/remote_config'
 
 module Hackle
-  describe RemoteConfig do
+  RSpec.describe RemoteConfig do
 
     before do
       @user = User.builder.build

@@ -6,7 +6,7 @@ require 'net/http'
 require 'hackle/internal/event/user_event_dispatcher'
 
 module Hackle
-  describe UserEventDispatcher do
+  RSpec.describe UserEventDispatcher do
 
     before do
       @http_client = double
@@ -105,7 +105,7 @@ module Hackle
     end
   end
 
-  describe UserEventSerializer do
+  RSpec.describe UserEventSerializer do
 
     it 'serialize' do
       sut = UserEventSerializer.new

@@ -8,7 +8,7 @@ require 'hackle/internal/event/user_event_processor'
 require 'hackle/internal/core/hackle_core'
 
 module Hackle
-  describe Core do
+  RSpec.describe Core do
     before do
       @experiment_evaluator = double
       @remote_config_evaluator = double

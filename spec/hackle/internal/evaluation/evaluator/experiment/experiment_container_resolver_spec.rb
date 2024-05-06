@@ -5,7 +5,7 @@ require 'models'
 require 'hackle/internal/evaluation/evaluator/experiment/experiment_resolver'
 
 module Hackle
-  describe ExperimentContainerResolver do
+  RSpec.describe ExperimentContainerResolver do
     before do
       @bucketer = double
       @sut = ExperimentContainerResolver.new(bucketer: @bucketer)

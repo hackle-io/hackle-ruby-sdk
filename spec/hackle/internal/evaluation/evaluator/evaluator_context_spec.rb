@@ -4,7 +4,7 @@ require 'rspec'
 require 'hackle/internal/evaluation/evaluator/evaluator'
 
 module Hackle
-  describe EvaluatorContext do
+  RSpec.describe EvaluatorContext do
     it 'request' do
       context = Evaluator.context
       expect(context.requests.length).to eq(0)

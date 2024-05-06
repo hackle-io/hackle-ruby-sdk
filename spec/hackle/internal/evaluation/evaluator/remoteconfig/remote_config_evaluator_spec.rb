@@ -5,7 +5,7 @@ require 'models'
 require 'hackle/internal/evaluation/evaluator/remoteconfig/remote_config_evaluator'
 
 module Hackle
-  describe RemoteConfigEvaluator do
+  RSpec.describe RemoteConfigEvaluator do
     before do
       @target_rule_determiner = double
       @sut = RemoteConfigEvaluator.new(target_rule_determiner: @target_rule_determiner)

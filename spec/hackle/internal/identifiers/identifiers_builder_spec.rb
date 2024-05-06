@@ -4,7 +4,7 @@ require 'rspec'
 require 'hackle/internal/identifiers/identifier_builder'
 
 module Hackle
-  describe IdentifiersBuilder do
+  RSpec.describe IdentifiersBuilder do
     context 'validations' do
       it 'ensures max identifier type length is 128' do
         builder = IdentifiersBuilder.new

@@ -6,7 +6,7 @@ require 'hackle/internal/event/user_event'
 require 'hackle/internal/event/user_event_factory'
 
 module Hackle
-  describe UserEventFactory do
+  RSpec.describe UserEventFactory do
     it 'create' do
       sut = UserEventFactory.new(clock: FixedClock.new(42))
 

@@ -4,7 +4,7 @@ require 'rspec'
 require 'hackle/internal/clock/clock'
 
 module Hackle
-  describe SystemClock do
+  RSpec.describe SystemClock do
 
     context 'system' do
       it 'current_millis' do

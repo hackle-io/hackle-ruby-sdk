@@ -7,7 +7,7 @@ require 'hackle/remote_config'
 require 'hackle/client'
 
 module Hackle
-  describe Client do
+  RSpec.describe Client do
 
     before do
       @core = double

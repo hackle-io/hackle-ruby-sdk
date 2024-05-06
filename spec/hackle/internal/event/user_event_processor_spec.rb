@@ -6,7 +6,7 @@ require 'concurrent'
 require 'hackle/internal/event/user_event_processor'
 
 module Hackle
-  describe UserEventProcessor do
+  RSpec.describe UserEventProcessor do
 
     before do
       @event_dispatcher = double

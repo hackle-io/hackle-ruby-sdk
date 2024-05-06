@@ -4,7 +4,7 @@ require 'rspec'
 require 'hackle/internal/config/parameter_config'
 
 module Hackle
-  describe ParameterConfig do
+  RSpec.describe ParameterConfig do
 
     context 'config' do
       config = ParameterConfig.new(

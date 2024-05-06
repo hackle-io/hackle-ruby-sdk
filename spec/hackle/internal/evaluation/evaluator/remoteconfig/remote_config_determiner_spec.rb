@@ -5,7 +5,7 @@ require 'models'
 require 'hackle/internal/evaluation/evaluator/remoteconfig/remote_config_determiner'
 
 module Hackle
-  describe RemoteConfigTargetRuleDeterminer do
+  RSpec.describe RemoteConfigTargetRuleDeterminer do
     before do
       @matcher = instance_double(RemoteConfigTargetRuleMatcher)
       @sut = RemoteConfigTargetRuleDeterminer.new(matcher: @matcher)
@@ -64,7 +64,7 @@ module Hackle
     end
   end
 
-  describe RemoteConfigTargetRuleMatcher do
+  RSpec.describe RemoteConfigTargetRuleMatcher do
     before do
       @target_matcher = double
       @bucketer = double

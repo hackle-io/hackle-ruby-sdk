@@ -10,7 +10,7 @@ require 'hackle/internal/model/segment'
 require 'hackle/internal/workspace/workspace'
 
 module Hackle
-  describe SegmentConditionMatcher do
+  RSpec.describe SegmentConditionMatcher do
     before do
       @segment_matcher = double
       @sut = SegmentConditionMatcher.new(segment_matcher: @segment_matcher)
@@ -113,7 +113,7 @@ module Hackle
     end
   end
 
-  describe SegmentMatcher do
+  RSpec.describe SegmentMatcher do
 
     before do
       @user_condition_matcher = double

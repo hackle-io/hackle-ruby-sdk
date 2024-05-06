@@ -15,7 +15,7 @@ module Hackle
     end
   end
 
-  describe ValueMatcher do
+  RSpec.describe ValueMatcher do
     [
       Test.new(
         name: 'String',

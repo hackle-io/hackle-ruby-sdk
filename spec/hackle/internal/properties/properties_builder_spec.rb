@@ -4,7 +4,7 @@ require 'rspec'
 require 'hackle/internal/properties/properties_builder'
 
 module Hackle
-  describe PropertiesBuilder do
+  RSpec.describe PropertiesBuilder do
 
     it 'raw value valid build' do
       expect(PropertiesBuilder.new.add('key1', 1).build).to eq({ 'key1' => 1 })

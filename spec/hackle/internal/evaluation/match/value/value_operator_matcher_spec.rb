@@ -8,7 +8,7 @@ require 'hackle/internal/evaluation/match/value/value_matcher_factory'
 require 'hackle/internal/evaluation/match/operator/operator_matcher_factory'
 
 module Hackle
-  describe ValueOperatorMatcher do
+  RSpec.describe ValueOperatorMatcher do
     before do
       @sut = ValueOperatorMatcher.new(
         value_matcher_factory: ValueMatcherFactory.new,

@@ -4,7 +4,7 @@ require 'rspec'
 require 'hackle/user'
 
 module Hackle
-  describe User do
+  RSpec.describe User do
     it 'user build' do
       user = User.builder
                  .id('id')

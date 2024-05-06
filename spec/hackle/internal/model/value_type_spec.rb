@@ -4,7 +4,7 @@ require 'rspec'
 require 'hackle/internal/model/value_type'
 
 module Hackle
-  describe ValueType do
+  RSpec.describe ValueType do
     it 'from_or_nil' do
       expect(ValueType.from_or_nil('NULL')).to eq(ValueType::NULL)
       expect(ValueType.from_or_nil('UNKNOWN')).to eq(ValueType::UNKNOWN)

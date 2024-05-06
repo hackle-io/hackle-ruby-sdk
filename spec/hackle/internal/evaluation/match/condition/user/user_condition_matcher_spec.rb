@@ -7,7 +7,7 @@ require 'hackle/internal/model/target'
 require 'hackle/internal/user/hackle_user'
 
 module Hackle
-  describe UserConditionMatcher do
+  RSpec.describe UserConditionMatcher do
     before do
       @user_value_resolver = double
       @value_operator_matcher = double
@@ -51,7 +51,7 @@ module Hackle
     end
   end
 
-  describe UserValueResolver do
+  RSpec.describe UserValueResolver do
 
     before do
       @sut = UserValueResolver.new

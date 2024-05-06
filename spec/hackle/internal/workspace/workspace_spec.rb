@@ -6,7 +6,7 @@ require 'json'
 require 'hackle/internal/workspace/workspace'
 
 module Hackle
-  describe Workspace do
+  RSpec.describe Workspace do
 
     it 'create' do
       json = File.read('spec/data/workspace_config.json')

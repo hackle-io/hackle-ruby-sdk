@@ -5,7 +5,7 @@ require 'hackle/internal/evaluation/bucketer/bucketer'
 require 'hackle/internal/model/bucket'
 
 module Hackle
-  describe Bucketer do
+  RSpec.describe Bucketer do
 
     it 'bucketing' do
       hasher = double
@@ -47,7 +47,7 @@ module Hackle
     end
   end
 
-  describe Hasher do
+  RSpec.describe Hasher do
     it 'hash' do
       def _test(filename)
         sut = Hasher.new

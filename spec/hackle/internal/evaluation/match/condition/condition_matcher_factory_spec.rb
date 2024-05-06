@@ -5,7 +5,7 @@ require 'models'
 require 'hackle/internal/evaluation/match/condition/condition_matcher_factory'
 
 module Hackle
-  describe ConditionMatcherFactory do
+  RSpec.describe ConditionMatcherFactory do
 
     it 'get' do
       factory = ConditionMatcherFactory.new(evaluator: double)

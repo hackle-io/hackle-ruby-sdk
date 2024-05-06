@@ -5,7 +5,7 @@ require 'hackle/internal/evaluation/match/target/target_matcher'
 require 'models'
 
 module Hackle
-  describe TargetMatcher do
+  RSpec.describe TargetMatcher do
     before do
       @condition_matcher = double
       @condition_matcher_factory = double

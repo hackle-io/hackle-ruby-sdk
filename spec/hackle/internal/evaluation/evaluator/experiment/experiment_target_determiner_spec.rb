@@ -5,7 +5,7 @@ require 'models'
 require 'hackle/internal/evaluation/evaluator/experiment/experiment_resolver'
 
 module Hackle
-  describe ExperimentTargetDeterminer do
+  RSpec.describe ExperimentTargetDeterminer do
     before do
       @target_matcher = double
       @sut = ExperimentTargetDeterminer.new(target_matcher: @target_matcher)

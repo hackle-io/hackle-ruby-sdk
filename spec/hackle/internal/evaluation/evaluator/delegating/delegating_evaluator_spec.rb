@@ -7,7 +7,7 @@ require 'hackle/internal/evaluation/evaluator/evaluator'
 require 'hackle/internal/workspace/workspace'
 
 module Hackle
-  describe DelegatingEvaluator do
+  RSpec.describe DelegatingEvaluator do
 
     it 'evaluator' do
       sut = DelegatingEvaluator.new

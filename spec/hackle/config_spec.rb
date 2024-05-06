@@ -5,7 +5,7 @@ require 'models'
 require 'hackle/config'
 
 module Hackle
-  describe Config do
+  RSpec.describe Config do
 
     it 'build' do
       logger = double

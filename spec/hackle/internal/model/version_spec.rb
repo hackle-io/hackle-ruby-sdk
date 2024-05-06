@@ -4,7 +4,7 @@ require 'rspec'
 require 'hackle/internal/model/version'
 
 module Hackle
-  describe Version do
+  RSpec.describe Version do
     # @return [Hackle::Version]
     def v(version_string)
       version = Version.parse_or_nil(version_string)

@@ -6,7 +6,7 @@ require 'hackle/internal/evaluation/match/operator/operator_matcher_factory'
 require 'hackle/internal/model/target'
 
 module Hackle
-  describe OperatorMatcherFactory do
+  RSpec.describe OperatorMatcherFactory do
 
     it 'get' do
       sut = OperatorMatcherFactory.new

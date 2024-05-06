@@ -5,7 +5,7 @@ require 'hackle/internal/concurrent/schedule/timer_scheduler'
 require 'hackle/internal/logger/logger'
 
 module Hackle
-  describe TimerScheduler do
+  RSpec.describe TimerScheduler do
 
     it 'schedule' do
       count = 0

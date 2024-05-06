@@ -5,7 +5,7 @@ require 'models'
 require 'hackle/internal/http/http'
 
 module Hackle
-  describe HTTP do
+  RSpec.describe HTTP do
 
     it 'client' do
       client = HTTP.client(base_url: 'http://localhost')
