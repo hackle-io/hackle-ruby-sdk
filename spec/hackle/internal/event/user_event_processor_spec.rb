@@ -221,6 +221,8 @@ module Hackle
 
         sleep(0.1)
         expect(q.length).to eq(0)
+
+        sut.stop
       end
 
       it 'when consuming task is not alive then start consuming' do
