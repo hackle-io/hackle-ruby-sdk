@@ -4,11 +4,16 @@ require 'simplecov'
 require 'simplecov-lcov'
 require 'simplecov-cobertura'
 
-SimpleCov.formatter = if ENV['COVERAGE']
-                        SimpleCov::Formatter::CoberturaFormatter
-                      else
-                        SimpleCov::Formatter::HTMLFormatter
-                      end
+SimpleCov.formatters = if ENV['COVERAGE']
+                         SimpleCov::Formatter::MultiFormatter.new([
+                                                                    SimpleCov::Formatter::CoberturaFormatter,
+                                                                    SimpleCov::Formatter::LcovFormatter
+                                                                  ])
+                       else
+                         SimpleCov::Formatter::MultiFormatter.new([
+                                                                    SimpleCov::Formatter::HTMLFormatter
+                                                                  ])
+                       end
 SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
 SimpleCov.start { add_filter '/spec/' } if ENV['COVERAGE']
 

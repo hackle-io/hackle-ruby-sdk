@@ -37,8 +37,8 @@ jobs:
           badge: true
           fail_below_min: true
           format: markdown
-          hide_branch_rate: true
-          hide_complexity: true
+          hide_branch_rate: false
+          hide_complexity: false
           indicators: true
           output: both
           thresholds: '80 90'
