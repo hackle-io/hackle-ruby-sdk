@@ -39,6 +39,16 @@ module Hackle
       expect(@event_processor).to have_received(:stop).exactly(1).times
     end
 
+    it 'resume' do
+      allow(@workspace_fetcher).to receive(:resume).and_return nil
+      allow(@event_processor).to receive(:resume).and_return nil
+
+      @sut.resume
+
+      expect(@workspace_fetcher).to have_received(:resume).exactly(1).times
+      expect(@event_processor).to have_received(:resume).exactly(1).times
+    end
+
     describe 'experiment' do
       it 'when sdk not ready then return default variation' do
         user = HackleUser.builder.build

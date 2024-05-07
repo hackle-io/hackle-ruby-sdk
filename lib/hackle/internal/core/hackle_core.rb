@@ -160,6 +160,11 @@ module Hackle
       @event_processor.stop
     end
 
+    def resume
+      @workspace_fetcher.resume
+      @event_processor.resume
+    end
+
     private
 
     # @param event [Event]

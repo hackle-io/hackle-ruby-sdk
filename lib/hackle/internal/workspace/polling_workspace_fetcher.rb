@@ -43,6 +43,11 @@ module Hackle
       @polling_job = nil
     end
 
+    def resume
+      @polling_job&.cancel
+      @polling_job = @scheduler.schedule_periodically(@polling_interval_seconds, -> { poll })
+    end
+
     private
 
     def poll

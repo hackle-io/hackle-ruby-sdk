@@ -114,5 +114,40 @@ module Hackle
         sut.stop
       end
     end
+
+    describe 'resume' do
+      it 'when not started then schedule polling' do
+        sut = fetcher(polling_interval_seconds: 0.2)
+        sut.resume
+        sleep(0.5)
+        expect(@http_workspace_fetcher).to have_received(:fetch_if_modified).exactly(2).times
+        sut.stop
+      end
+
+      it 'when started then cancel job and restart' do
+        sut = fetcher(polling_interval_seconds: 0.2)
+        sut.start
+        sut.resume
+        sleep(0.5)
+        expect(@http_workspace_fetcher).to have_received(:fetch_if_modified).exactly(3).times
+        sut.stop
+      end
+
+      it 'fork' do
+        sut = fetcher(polling_interval_seconds: 0.2)
+        sut.start
+
+        fork do
+          sut.resume
+          sleep(0.5)
+          expect(@http_workspace_fetcher).to have_received(:fetch_if_modified).exactly(3).times
+        end
+
+        sleep(0.5)
+        expect(@http_workspace_fetcher).to have_received(:fetch_if_modified).exactly(3).times
+
+        sut.stop
+      end
+    end
   end
 end

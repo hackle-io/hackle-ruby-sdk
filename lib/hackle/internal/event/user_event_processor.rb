@@ -3,7 +3,6 @@
 require 'hackle/internal/logger/logger'
 
 module Hackle
-
   module UserEventProcessor
     # @param event [UserEvent]
     def process(event) end
@@ -12,6 +11,9 @@ module Hackle
     end
 
     def stop
+    end
+
+    def resume
     end
   end
 
@@ -95,6 +97,15 @@ module Hackle
       @is_started = false
     end
 
+    def resume
+      @consuming_task = Thread.new { consuming } if @consuming_task.nil? || !@consuming_task.alive?
+
+      @flushing_job&.cancel
+      @flushing_job = @flush_scheduler.schedule_periodically(@flush_interval_seconds, -> { flush })
+
+      @is_started = true
+    end
+
     private
 
     # @param message [Message]
@@ -140,8 +151,12 @@ module Hackle
     def dispatch_events
       return if @current_batch.empty?
 
-      @event_dispatcher.dispatch(@current_batch)
-      @current_batch = []
+      begin
+        @event_dispatcher.dispatch(@current_batch)
+        @current_batch = []
+      rescue => e
+        Log.get.error { "Failed to dispatch events: #{e.inspect}" }
+      end
     end
 
     class Message

@@ -118,6 +118,40 @@ module Hackle
       end
     end
 
+    describe 'consuming' do
+
+      it 'unsupported type' do
+        queue = SizedQueue.new(10)
+        sut = processor(queue: queue, event_dispatch_size: 1)
+        sut.start
+        queue.push('invalid')
+        sut.process(UserEvents.track(key: '1'))
+        sleep(0.1)
+
+        expect(@event_dispatcher).to have_received(:dispatch).exactly(1).times
+
+        sut.stop
+      end
+
+      it 'error on consuming' do
+        queue = SizedQueue.new(10)
+        allow(@event_dispatcher).to receive(:dispatch).and_raise(ArgumentError)
+
+        sut = processor(queue: queue, event_dispatch_size: 1)
+        sut.start
+
+        sut.process(UserEvents.track(key: '1'))
+        sleep(0.1)
+        expect(@event_dispatcher).to have_received(:dispatch).exactly(1).times
+
+        sut.process(UserEvents.track(key: '1'))
+        sleep(0.1)
+        expect(@event_dispatcher).to have_received(:dispatch).exactly(2).times
+
+        sut.stop
+      end
+    end
+
     describe 'start' do
       it 'start once' do
         scheduler = double
@@ -174,6 +208,89 @@ module Hackle
         sut = processor
         sut.stop
         expect(@event_dispatcher).to have_received(:shutdown).exactly(0).times
+      end
+    end
+
+    describe 'resume' do
+      it 'when consuming task is nil then start consuming' do
+        q = SizedQueue.new(10)
+        sut = processor(queue: q)
+
+        sut.resume
+        sut.process(UserEvents.track(key: '1'))
+
+        sleep(0.1)
+        expect(q.length).to eq(0)
+      end
+
+      it 'when consuming task is not alive then start consuming' do
+        q = SizedQueue.new(10)
+        sut = processor(queue: q)
+        sut.start
+        sut.stop
+
+        sut.resume
+        sut.process(UserEvents.track(key: '1'))
+
+        sleep(0.1)
+        expect(q.length).to eq(0)
+
+        sut.stop
+      end
+
+      it 'reschedule flush' do
+        q = SizedQueue.new(10)
+        allow(q).to receive(:push).and_call_original
+        sut = processor(queue: q, flush_interval_seconds: 0.5)
+        sut.start
+
+        sleep(0.8)
+        expect(q).to have_received(:push).exactly(1).times
+
+        sut.resume
+        sleep(0.8)
+        expect(q).to have_received(:push).exactly(2).times
+      end
+
+      it 'fork consume' do
+        q = SizedQueue.new(10)
+        sut = processor(queue: q, event_dispatch_size: 1)
+        sut.start
+
+        fork do
+          sut.resume
+          sut.process(UserEvents.track(key: '1'))
+          sut.process(UserEvents.track(key: '2'))
+          sleep(0.1)
+          expect(@event_dispatcher).to have_received(:dispatch).exactly(2).times
+          sut.stop
+        end
+
+        sut.process(UserEvents.track(key: '1'))
+        sut.process(UserEvents.track(key: '2'))
+        sleep(0.1)
+        expect(@event_dispatcher).to have_received(:dispatch).exactly(2).times
+        sut.stop
+      end
+
+      it 'fork flush' do
+        q = SizedQueue.new(10)
+        allow(q).to receive(:push).and_call_original
+        sut = processor(queue: q, event_dispatch_size: 1, flush_interval_seconds: 0.2)
+        sut.start
+
+        fork do
+          sut.resume
+          sleep(0.5)
+          expect(q).to have_received(:push).exactly(2).times
+
+          sut.stop
+        end
+
+        sleep(0.5)
+        expect(q).to have_received(:push).exactly(2).times
+
+        sut.stop
       end
     end
   end

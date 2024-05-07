@@ -11,5 +11,8 @@ module Hackle
 
     def stop
     end
+
+    def resume
+    end
   end
 end

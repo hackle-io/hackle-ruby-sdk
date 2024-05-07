@@ -12,6 +12,7 @@ module Hackle
     before do
       @core = double
       allow(@core).to receive(:close).and_return true
+      allow(@core).to receive(:resume).and_return true
       @sut = Client.new(core: @core, user_resolver: HackleUserResolver.new)
     end
 
@@ -170,6 +171,12 @@ module Hackle
       @sut.close
 
       expect(@core).to have_received(:close).exactly(1).times
+    end
+
+    it 'resume' do
+      @sut.__resume
+
+      expect(@core).to have_received(:resume).exactly(1).times
     end
   end
 end
