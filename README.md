@@ -1,33 +1,9 @@
-# Hackle::Ruby::Sdk
+# Hackle Ruby SDK
+[![tests](https://github.com/hackle-io/hackle-ruby-sdk/actions/workflows/test.yml/badge.svg)](https://github.com/hackle-io/hackle-ruby-sdk/actions/workflows/test.yml)
+[![Gem Version](https://img.shields.io/gem/v/hackle-ruby-sdk)](https://rubygems.org/gems/hackle-ruby-sdk)
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/hackle`.
 
-## Installation
+Ruby SDK for Hackle A/B Tests, Feature Flags, Remote Configs, and Analytics.
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'hackle-ruby-sdk'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install hackle-ruby-sdk
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/hackle-ruby-sdk.
+## Getting Started
+Check out our [SDK docs](https://docs.hackle.io/docs/ruby-sdk-init) to get started.
