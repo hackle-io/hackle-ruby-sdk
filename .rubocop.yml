@@ -1,0 +1,30 @@
+Style/Documentation:
+  Enabled: false
+Style/EmptyMethod:
+  Enabled: false
+Style/TrivialAccessors:
+  Enabled: false
+Style/RescueStandardError:
+  Enabled: false
+Metrics/ModuleLength:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+Metrics/ParameterLists:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/AbcSize:
+  Enabled: false
+Naming/PredicateName:
+  Exclude:
+    - 'spec/**/*'
+    - 'lib/hackle/client.rb'
+Lint/UnusedMethodArgument:
+  Enabled: false
