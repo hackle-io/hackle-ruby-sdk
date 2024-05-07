@@ -30,7 +30,8 @@ jobs:
       - name: Run tests
         run: rake spec
       - name: Report coverage
-        if: ${{ matrix.ruby-version }} == '3.3
+        if: ${{ matrix.ruby-version }} == '3.3'
         uses: romeovs/lcov-reporter-action@v0.3.1
         with:
-          lcov-file: coverage/lcov/hackle-ruby-sdk.lcov
+          lcov-file: ./coverage/lcov/hackle-ruby-sdk.lcov
+          github-token: ${{ secrets.GITHUB_TOKEN }}
