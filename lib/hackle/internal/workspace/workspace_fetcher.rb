@@ -5,5 +5,11 @@ module Hackle
     # @return [Workspace, nil]
     def fetch
     end
+
+    def start
+    end
+
+    def stop
+    end
   end
 end

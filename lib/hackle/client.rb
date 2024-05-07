@@ -33,8 +33,6 @@ module Hackle
       @user_resolver = user_resolver
     end
 
-    @instances = {}
-
     #
     # Instantiates a Hackle client.
     #
@@ -43,9 +41,6 @@ module Hackle
     # @return [Hackle::Client]
     #
     def self.create(sdk_key:, config: Config.builder.build)
-      client = @instances[sdk_key]
-      return client unless client.nil?
-
       Log.init(config.logger)
 
       sdk = Sdk.new(name: 'ruby-sdk', version: Hackle::VERSION, key: sdk_key)
@@ -82,13 +77,10 @@ module Hackle
         event_processor: event_processor
       )
 
-      new_client = Client.new(
+      Client.new(
         core: core,
         user_resolver: HackleUserResolver.new
       )
-
-      @instances[sdk_key] = new_client
-      new_client
     end
 
     #
