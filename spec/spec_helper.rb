@@ -2,12 +2,14 @@
 
 require 'simplecov'
 require 'simplecov-lcov'
-SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
-SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
-                                                                  SimpleCov::Formatter::HTMLFormatter,
-                                                                  SimpleCov::Formatter::LcovFormatter
-                                                                ])
+require 'simplecov-cobertura'
 
+SimpleCov.formatter = if ENV['COVERAGE']
+                        SimpleCov::Formatter::CoberturaFormatter
+                      else
+                        SimpleCov::Formatter::HTMLFormatter
+                      end
+SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
 SimpleCov.start { add_filter '/spec/' } if ENV['COVERAGE']
 
 require 'hackle'
