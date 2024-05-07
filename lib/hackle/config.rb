@@ -4,30 +4,72 @@ require 'logger'
 
 module Hackle
   class Config
-
-    def initialize(options = {})
-      @logger = options[:logger] || Config.default_logger
-      @base_uri = options[:base_uri] || Config.default_base_uri
-      @event_uri = options[:event_uri] || Config.default_event_uri
-    end
-
+    # @return [Logger]
     attr_reader :logger
-    attr_reader :base_uri
-    attr_reader :event_uri
 
-    def self.default_base_uri
-      'https://sdk.hackle.io'
+    # @return [String]
+    attr_reader :sdk_url
+
+    # @return [String]
+    attr_reader :event_url
+
+    # @param logger [Logger]
+    # @param sdk_url [String]
+    # @param event_url [String]
+    def initialize(
+      logger:,
+      sdk_url:,
+      event_url:
+    )
+      @logger = logger
+      @sdk_url = sdk_url
+      @event_url = event_url
     end
 
-    def self.default_event_uri
-      'https://event.hackle.io'
+    def self.builder
+      Builder.new
     end
 
-    def self.default_logger
-      if defined?(Rails) && Rails.logger
-        Rails.logger
-      else
-        Logger.new($stdout)
+    class Builder
+      def initialize
+        # noinspection RubyResolve
+        @logger = if defined?(Rails) && Rails.logger
+                    Rails.logger
+                  else
+                    Logger.new($stdout)
+                  end
+        @sdk_url = 'https://sdk.hackle.io'
+        @event_url = 'https://event.hackle.io'
+      end
+
+      # @param logger [Logger]
+      # @return [Hackle::Config::Builder]
+      def logger(logger)
+        @logger = logger
+        self
+      end
+
+      # @param sdk_url [String]
+      # @return [Hackle::Config::Builder]
+      def sdk_url(sdk_url)
+        @sdk_url = sdk_url
+        self
+      end
+
+      # @param event_url [String]
+      # @return [Hackle::Config::Builder]
+      def event_url(event_url)
+        @event_url = event_url
+        self
+      end
+
+      # @return [Hackle::Config]
+      def build
+        Config.new(
+          logger: @logger,
+          sdk_url: @sdk_url,
+          event_url: @event_url
+        )
       end
     end
   end
