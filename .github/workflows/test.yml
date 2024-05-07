@@ -48,8 +48,3 @@ jobs:
         with:
           recreate: true
           path: code-coverage-results.md
-      - name: Report coverage v2
-        if: ${{ matrix.ruby-version }} == '3.3'
-        uses: romeovs/lcov-reporter-action@v0.2.16
-        with:
-          lcov-file: ./coverage/lcov/hackle-ruby-sdk.lcov
